@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>iOS 18 Band App</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+    body, html { width: 100%; height: 100%; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif; background: #000; color: #fff; overflow: hidden; }
+    
+    #app-container {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+      height: 100%;
+      margin: 0 auto;
+      background: url('photo1.jpg') center/cover no-repeat;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .status-bar {
+      height: 44px;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 999;
+    }
+
+    .screen {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s ease;
+      background: #000;
+      z-index: 10;
+    }
+
+    .screen.home {
+      background: transparent;
+      padding: 50px 20px 20px 20px;
+      z-index: 1;
+    }
+
+    .screen.hidden {
+      transform: scale(0.92);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .widgets-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .widget {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-radius: 22px;
+      padding: 16px;
+      height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+
+    .widget-calendar .day { color: #ff3b30; font-size: 13px; font-weight: 700; text-transform: uppercase; }
+    .widget-calendar .date { font-size: 32px; font-weight: 300; margin-bottom: 4px; }
+    .widget-calendar .event { font-size: 12px; background: rgba(255,255,255,0.25); padding: 4px 8px; border-radius: 8px; font-weight: 500; }
+
+    .widget-photo {
+      padding: 0;
+      overflow: hidden;
+      background: url('photo1.jpg') center/cover;
+      cursor: pointer;
+      position: relative;
+    }
+    .widget-photo::after {
+      content: '추억';
+      position: absolute;
+      bottom: 8px; left: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(0,0,0,0.4);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px 14px;
+    }
+
+    .app-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .icon-box {
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      position: relative;
+    }
+
+    .badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      background: #ff3b30;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 10px;
+      border: 2px solid #000;
+    }
+
+    .bg-memo { background: #ffcc00; color: #fff; }
+    .bg-safari { background: #fff; color: #007aff; }
+    .bg-x { background: #000; color: #fff; border: 1px solid #333; }
+    .bg-insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; }
+    .bg-photos { background: #fff; }
+    .bg-kakao { background: #fee500; color: #000; font-weight: bold; font-size: 16px; }
+    .bg-messages { background: #34c759; color: #fff; }
+    .bg-phone { background: #30d158; color: #fff; }
+    .bg-camera { background: #8e8e93; color: #fff; }
+
+    .dock {
+      position: absolute;
+      bottom: 20px;
+      left: 16px; right: 16px;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-radius: 30px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .home-indicator {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 134px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 3px;
+      z-index: 9999;
+      cursor: pointer;
+    }
+
+    .nav-bar {
+      height: 54px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
+      background: rgba(20, 20, 20, 0.8);
+      backdrop-filter: blur(20px);
+      margin-top: 30px;
+    }
+    .nav-title { font-size: 17px; font-weight: 600; }
+    .back-btn { color: #0a84ff; font-size: 16px; cursor: pointer; display: flex; align-items: center; }
+
+    .photos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      padding: 2px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .photo-item {
+      aspect-ratio: 1;
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+    }
+
+    .lightbox {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.95);
+      z-index: 10000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 90%; max-height: 80%; border-radius: 8px; object-fit: contain; }
+    .lightbox-arrow {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      color: white; font-size: 30px; padding: 16px; cursor: pointer;
+    }
+    .arrow-left { left: 10px; }
+    .arrow-right { right: 10px; }
+
+    .recents-list { overflow-y: auto; flex: 1; background: #000; }
+    .date-section { padding: 12px 16px 6px; font-size: 13px; color: #8e8e93; font-weight: 600; background: #121212; }
+    .call-item {
+      padding: 12px 16px;
+      border-bottom: 0.5px solid #2c2c2e;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .call-name { font-size: 16px; font-weight: 500; }
+    .call-name.missed { color: #ff453a; }
+    .call-sub { font-size: 12px; color: #8e8e93; margin-top: 2px; }
+    .call-time { font-size: 13px; color: #8e8e93; }
+
+    .msg-list { overflow-y: auto; flex: 1; background: #000; }
+    .msg-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 0.5px solid #2c2c2e;
+      cursor: pointer;
+    }
+    .blue-dot { width: 10px; height: 10px; background: #0a84ff; border-radius: 50%; margin-right: 10px; flex-shrink: 0; }
+    .avatar { width: 45px; height: 45px; border-radius: 50%; background: #3a3a3c; display: flex; justify-content: center; align-items: center; font-weight: 600; margin-right: 12px; flex-shrink: 0; }
+    .msg-content { flex: 1; overflow: hidden; }
+    .msg-header { display: flex; justify-content: space-between; margin-bottom: 3px; }
+    .msg-author { font-size: 16px; font-weight: 600; }
+    .msg-preview { font-size: 14px; color: #8e8e93; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .chat-room { display: flex; flex-direction: column; background: #000; height: 100%; }
+    .chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .chat-date { text-align: center; font-size: 11px; color: #8e8e93; margin: 12px 0 4px; }
+    .bubble {
+      max-width: 70%;
+      padding: 8px 14px;
+      border-radius: 18px;
+      font-size: 15px;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+    .bubble.other { background: #262628; align-self: flex-start; color: #fff; border-bottom-left-radius: 4px; }
+    .bubble.me { background: #0a84ff; align-self: flex-end; color: #fff; border-bottom-right-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<div id="app-container">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>5G 🔋</span>
+  </div>
+
+  <!-- 1. Home Screen -->
+  <div class="screen home" id="screen-home">
+    <div class="widgets-container">
+      <div class="widget widget-calendar">
+        <div class="day">10월 24일 토요일</div>
+        <div class="date">24</div>
+        <div class="event">🎸 밴드 합주 13:00 - 17:00</div>
+      </div>
+      <div class="widget widget-photo" id="widget-photo"></div>
+    </div>
+
+    <div class="app-grid">
+      <div class="app-icon" onclick="openApp('memo')"><div class="icon-box bg-memo">📝</div></div>
+      <div class="app-icon" onclick="openApp('safari')"><div class="icon-box bg-safari">🧭</div></div>
+      <div class="app-icon" onclick="openApp('x')"><div class="icon-box bg-x">𝕏</div></div>
+      <div class="app-icon" onclick="openApp('insta')"><div class="icon-box bg-insta">📸</div></div>
+      <div class="app-icon" onclick="openApp('photos')"><div class="icon-box bg-photos">🖼️</div></div>
+      <div class="app-icon" onclick="openApp('kakao')"><div class="icon-box bg-kakao">TALK</div></div>
+      <div class="app-icon" onclick="openApp('messages')">
+        <div class="icon-box bg-messages">💬</div>
+        <span class="badge">13</span>
+      </div>
+      <div class="app-icon" onclick="openApp('phone')">
+        <div class="icon-box bg-phone">📞</div>
+        <span class="badge">11</span>
+      </div>
+      <div class="app-icon" onclick="openApp('camera')"><div class="icon-box bg-camera">📷</div></div>
+    </div>
+
+    <div class="dock">
+      <div class="app-icon" onclick="openApp('phone')"><div class="icon-box bg-phone">📞</div></div>
+      <div class="app-icon" onclick="openApp('safari')"><div class="icon-box bg-safari">🧭</div></div>
+      <div class="app-icon" onclick="openApp('kakao')"><div class="icon-box bg-kakao">TALK</div></div>
+      <div class="app-icon" onclick="openApp('messages')"><div class="icon-box bg-messages">💬</div></div>
+    </div>
+  </div>
+
+  <!-- 2. Photos App Screen -->
+  <div class="screen hidden" id="screen-photos">
+    <div class="nav-bar">
+      <div class="back-btn" onclick="goHome()">＜ 홈</div>
+      <div class="nav-title">사진</div>
+      <div></div>
+    </div>
+    <div class="photos-grid" id="photos-grid"></div>
+  </div>
+
+  <!-- 3. Phone App Screen -->
+  <div class="screen hidden" id="screen-phone">
+    <div class="nav-bar">
+      <div class="back-btn" onclick="goHome()">＜ 홈</div>
+      <div class="nav-title">최근 통화</div>
+      <div></div>
+    </div>
+    <div class="recents-list" id="recents-list"></div>
+  </div>
+
+  <!-- 4. Messages App Screen -->
+  <div class="screen hidden" id="screen-messages">
+    <div class="nav-bar">
+      <div class="back-btn" onclick="goHome()">＜ 홈</div>
+      <div class="nav-title">메시지</div>
+      <div></div>
+    </div>
+    <div class="msg-list" id="msg-list"></div>
+  </div>
+
+  <!-- 5. Chat Room Screen -->
+  <div class="screen hidden" id="screen-chat">
+    <div class="nav-bar">
+      <div class="back-btn" onclick="openApp('messages')">＜ 목록</div>
+      <div class="nav-title" id="chat-title">대화방</div>
+      <div></div>
+    </div>
+    <div class="chat-room">
+      <div class="chat-messages" id="chat-messages"></div>
+    </div>
+  </div>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-arrow arrow-left" onclick="navigatePhoto(-1, event)">‹</div>
+    <img id="lightbox-img" src="" alt="확대 사진">
+    <div class="lightbox-arrow arrow-right" onclick="navigatePhoto(1, event)">›</div>
+  </div>
+
+  <!-- iOS Home Indicator -->
+  <div class="home-indicator" onclick="goHome()"></div>
+</div>
+
+<script>
+  // photo1.jpg ~ photo28.jpg 까지 자동 생성
+  const photoUrls = [];
+  for (let i = 1; i <= 27; i++) {
+    photoUrls.push(`photo${i}.jpg`);
+  }
+
+  let currentPhotoIdx = 0;
+
+  // Phone Call Logs
+  const callLogs = [
+    { section: "오늘 - 10월 24일", items: [
+      { name: "유우시 (2)", missed: true, sub: "오후 2:45" },
+      { name: "오시온 (6)", missed: true, sub: "오후 2:10" },
+      { name: "리쿠 (5)", missed: true, sub: "오전 11:30" }
+    ]},
+    { section: "어제 - 10월 23일", items: [
+      { name: "오시온", missed: false, sub: "어제 (통화 시간: 1시간 3분)" },
+      { name: "사쿠야", missed: false, sub: "어제 (통화 시간: 2분)" },
+      { name: "대영 (3)", missed: true, sub: "어제" }
+    ]},
+    { section: "10월 21일 수요일", items: [
+      { name: "료 (2)", missed: true, sub: "수요일" },
+      { name: "유우시", missed: false, sub: "수요일 (통화 시간: 18분)" }
+    ]},
+    { section: "10월 18일 일요일", items: [
+      { name: "리쿠", missed: false, sub: "10/18/26 (통화 시간: 42분)" },
+      { name: "오시온 (2)", missed: true, sub: "10/18/26" }
+    ]}
+  ];
+
+  // Chat Data
+  const chatData = {
+    sion: {
+      name: "시온",
+      stream: true,
+      messages: [
+        { sender: "other", text: "너 지금 어디야?" },
+        { sender: "other", text: "연습 시간 한참 지났는데 연락도 안 받고" },
+        { sender: "other", text: "너 설마 오늘 안 나와?" },
+        { sender: "other", text: "어제 일 때문에 그래?" },
+        { sender: "other", text: "지금 어딘데" },
+        { sender: "other", text: "내가 가?" }
+      ]
+    },
+    riku: {
+      name: "리쿠",
+      messages: [
+        { date: "10월 8일 목요일" },
+        { sender: "other", text: "지갑 두고갔어" }, { sender: "other", text: "신분증이랑 카드 다 여기 있다" },
+        { sender: "me", text: "헐 진짜?" }, { sender: "me", text: "나중에 연습실 갈 때 가져와줘" },
+        { sender: "other", text: "싫은데" }, { sender: "other", text: "가지러 와" },
+        { sender: "me", text: "가져다 주라구" },
+        { sender: "other", text: "가지러 오라구" },
+        { sender: "me", text: "귀찮게하네" },
+        { sender: "other", text: "오기 싫으면 지갑 없이 살든가" },
+        { sender: "me", text: "치사하네 진짜" },
+        { date: "10월 14일 수요일" },
+        { sender: "other", text: "오늘 합주 끝나고 같이 가?" },
+        { sender: "me", text: "아니" }, { sender: "me", text: "나 따로 갈 건데" },
+        { sender: "other", text: "왜" }, { sender: "other", text: "시온이 형이랑 가?" },
+        { sender: "me", text: "아니" }, { sender: "me", text: "나 집에 바로 갈 거임" },
+        { sender: "other", text: "그럼 같이 가" },
+        { sender: "me", text: "싫어" }, { sender: "me", text: "너 걸음 존나 빠르잖아" },
+        { sender: "other", text: "천천히 걸어줄 테니까 기다려라" },
+        { date: "10월 18일 일요일" },
+        { sender: "me", text: "나 배 아파" },
+        { sender: "other", text: "응" },
+        { sender: "me", text: "오래걸려?" },
+        { sender: "other", text: "아니" }, { sender: "other", text: "금방 가" },
+        { sender: "me", text: "아이스크림도 사와" }, { sender: "me", text: "초코맛" },
+        { sender: "other", text: "차가운거 안돼" },
+        { sender: "me", text: "ㅠㅠ" },
+        { date: "10월 23일 금요일" },
+        { sender: "other", text: "오늘 우리 집 와" },
+        { sender: "me", text: "ㄴㄴ" },
+        { sender: "other", text: "그럼 내가 가?" },
+        { sender: "me", text: "싫어" }, { sender: "me", text: "피곤해" },
+        { sender: "other", text: "피곤하다면서 형은 왜 따라가" },
+        { sender: "me", text: "밥 먹으러 간거임 오해 ㄴ" },
+        { date: "오늘" },
+        { sender: "other", text: "안 와?" }, { sender: "other", text: "시간 몇 시야 지금" }
+      ]
+    },
+    yushi: {
+      name: "유우시",
+      messages: [
+        { date: "10월 9일 금요일" },
+        { sender: "other", text: "어디?" }, { sender: "other", text: "어디?" }, { sender: "other", text: "어디?" }, { sender: "other", text: "어디?" },
+        { sender: "me", text: "ㄱㅏ는중" },
+        { sender: "other", text: "지각ㅋㅋ" },
+        { date: "10월 11일 일요일" },
+        { sender: "other", text: "왜 끊어?" },
+        { sender: "me", text: "손가락이 미끄러졌나봐" },
+        { sender: "other", text: "ㅋㅋㅋ" }, { sender: "other", text: "일부러 안 받은 거네" },
+        { date: "10월 19일 월요일" },
+        { sender: "other", text: "엄마는 외계인" }, { sender: "other", text: "아몬드 봉봉" }, { sender: "other", text: "민트초코" },
+        { sender: "me", text: "그만" }, { sender: "me", text: "다 자기 입맛이네" },
+        { sender: "other", text: "ㅋㅋㅋㅋ" }, { sender: "other", text: "자기니까" },
+        { date: "10월 21일 수요일" },
+        { sender: "me", text: "언제 오는데" }, { sender: "me", text: "진짜 죽을래?" }, { sender: "me", text: "전화 받아라" },
+        { sender: "other", text: "ㅋㅋㅋ" },
+        { sender: "me", text: "받으라고" },
+        { sender: "other", text: "손가락 미끄러짐" },
+        { sender: "me", text: "꺼져" }, { sender: "me", text: "나 갈래" },
+        { sender: "other", text: "ㅋㅋㅋ" }, { sender: "other", text: "다 왔는데" },
+        { date: "오늘" },
+        { sender: "other", text: "어디?" }, { sender: "other", text: "어디?" }, { sender: "other", text: "어디?" }, { sender: "other", text: "어디?" },
+        { sender: "other", text: "어디?" }, { sender: "other", text: "어디?" }, { sender: "other", text: "어디?" }, { sender: "other", text: "어디?" }
+      ]
+    },
+    daeyoung: {
+      name: "대영",
+      messages: [
+        { date: "10월 2일 금요일" },
+        { sender: "other", text: "누나 오늘 연습 수고하셨어요!" }, { sender: "other", text: "아까 피아노 파트 가르쳐주셔서 진짜 감사해요ㅎㅎ" },
+        { sender: "me", text: "내가 뭘 대영이가 다 했지~" }, { sender: "me", text: "오늘 고생했어~" },
+        { sender: "other", text: "네!" }, { sender: "other", text: "누나도 고생 많으셨습니다😄😄" },
+        { date: "10월 16일 금요일" },
+        { sender: "other", text: "누나 혹시 연습 끝나고 시간 되세요?" },
+        { sender: "me", text: "오늘 바로 가봐야 되는데 왜?" },
+        { sender: "other", text: "아ㅎㅎ" }, { sender: "other", text: "바쁘시구나 알겠습니다!" },
+        { date: "10월 22일 목요일" },
+        { sender: "other", text: "누나 내일 연습실 몇 시에 오세요?" },
+        { date: "오늘" },
+        { sender: "other", text: "누나 무슨 일 있어요?" }
+      ]
+    },
+    ryo: {
+      name: "료",
+      messages: [
+        { date: "10월 10일 토요일" },
+        { sender: "other", text: "누나 연습실에서 내 맥스 봤어?" }, { sender: "other", text: "사쿠야가 누나한테 물어보라던데" }, { sender: "other", text: "혹시 가져갔어?" },
+        { sender: "me", text: "유우시" },
+        { sender: "other", text: "아" },
+        { date: "10월 13일 화요일" },
+        { sender: "other", text: "누나 커피 마셔?" }, { sender: "other", text: "지금 게임해서 리쿠 형 걸렸어" },
+        { sender: "me", text: "마시는 중" },
+        { sender: "other", text: "또 시켜ㅋㅋ" },
+        { sender: "me", text: "ㄴㄴ" }, { sender: "me", text: "잔소리 싫다" },
+        { sender: "other", text: "ㅋㅋㅋㅋ" },
+        { date: "10월 16일 금요일" },
+        { sender: "me", text: "너네 화해 안 할거면 들어오지마" },
+        { sender: "other", text: "사쿠야가 먼저 우긴 거라니까" },
+        { sender: "me", text: "몰라" }, { sender: "me", text: "모르겠고" }, { sender: "me", text: "내가 연습실에서 싸우지 말랬지" },
+        { sender: "other", text: "맨날 사쿠야 편이네" },
+        { date: "10월 21일 수요일" },
+        { sender: "other", text: "다 왔어?" }, { sender: "other", text: "캬라멜 팝콘으로 시킨다" }, { sender: "other", text: "형이 그냥 시키래" },
+        { date: "오늘" },
+        { sender: "other", text: "연습실 분위기 왜이래?" }
+      ]
+    },
+    sakuya: {
+      name: "사쿠야",
+      messages: [
+        { date: "10월 11일 일요일" },
+        { sender: "other", text: "여주야 오늘 데이트 하자" }, { sender: "other", text: "밥도 먹고" }, { sender: "other", text: "영화도 보고" }, { sender: "other", text: "손도 잡고" },
+        { sender: "me", text: "까분다 진짜" },
+        { sender: "other", text: "ㅋㅋㅋㅋㅋ" },
+        { date: "10월 16일 금요일" },
+        { sender: "other", text: "누나누나" }, { sender: "other", text: "화해했어요" },
+        { sender: "me", text: "둘이 손잡고 들어와" },
+        { sender: "other", text: "무리야 그건" },
+        { sender: "me", text: "들어오기 싫다고?" },
+        { sender: "other", text: "들어가야지" },
+        { date: "10월 20일 화요일" },
+        { sender: "other", text: "누나누나" }, { sender: "other", text: "또 먼저 감?" }, { sender: "other", text: "왜 매일 사라지는 거야" }, { sender: "other", text: "치사하게 리쿠랑만 먼저 가고" }, { sender: "other", text: "나도 좀 같이 가자고" },
+        { sender: "me", text: "남아서 연습한다며" },
+        { sender: "other", text: "리쿠가 시키는 거잖아" },
+        { date: "10월 21일 수요일" },
+        { sender: "other", text: "누나누나" }, { sender: "other", text: "오늘 춥대 따뜻하게 입어" }, { sender: "other", text: "예쁘게 입지마" },
+        { date: "오늘" },
+        { sender: "other", text: "누나누나" }, { sender: "other", text: "오늘 비온대 우산 챙겨" }
+      ]
+    }
+  };
+
+  window.onload = function() {
+    // 갤러리 그리드 사진 로드
+    const photosContainer = document.getElementById('photos-grid');
+    photoUrls.forEach((url, i) => {
+      const item = document.createElement('div');
+      item.className = 'photo-item';
+      item.style.backgroundImage = `url('${url}')`;
+      item.onclick = () => openLightbox(i);
+      photosContainer.appendChild(item);
+    });
+
+    document.getElementById('widget-photo').onclick = () => openApp('photos');
+
+    // 최근 통화
+    const recentsContainer = document.getElementById('recents-list');
+    callLogs.forEach(sec => {
+      const sHeader = document.createElement('div');
+      sHeader.className = 'date-section';
+      sHeader.innerText = sec.section;
+      recentsContainer.appendChild(sHeader);
+
+      sec.items.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'call-item';
+        row.innerHTML = `
+          <div>
+            <div class="call-name ${item.missed ? 'missed' : ''}">${item.name}</div>
+            <div class="call-sub">${item.sub}</div>
+          </div>
+          <div class="call-time">${item.sub.split(' ')[0]}</div>
+        `;
+        recentsContainer.appendChild(row);
+      });
+    });
+
+    // 메시지 목록
+    const msgContainer = document.getElementById('msg-list');
+    const msgPreviews = [
+      { key: 'sion', name: '시온', preview: '너 지금 어디야?' },
+      { key: 'riku', name: '리쿠', preview: '시간 몇 시야 지금' },
+      { key: 'yushi', name: '유우시', preview: '어디?' },
+      { key: 'daeyoung', name: '대영', preview: '누나 무슨 일 있어요?' },
+      { key: 'ryo', name: '료', preview: '연습실 분위기 왜이래?' },
+      { key: 'sakuya', name: '사쿠야', preview: '오늘 비온대 우산 챙겨' }
+    ];
+
+    msgPreviews.forEach(m => {
+      const row = document.createElement('div');
+      row.className = 'msg-item';
+      row.onclick = () => openChat(m.key);
+      row.innerHTML = `
+        <div class="blue-dot"></div>
+        <div class="avatar">${m.name[0]}</div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author">${m.name}</span>
+            <span style="font-size:12px; color:#8e8e93;">오늘</span>
+          </div>
+          <div class="msg-preview">${m.preview}</div>
+        </div>
+      `;
+      msgContainer.appendChild(row);
+    });
+  };
+
+  function openApp(appName) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    const target = document.getElementById('screen-' + appName);
+    if(target) target.classList.remove('hidden');
+  }
+
+  function goHome() {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    document.getElementById('screen-home').classList.remove('hidden');
+  }
+
+  function openLightbox(index) {
+    currentPhotoIdx = index;
+    document.getElementById('lightbox-img').src = photoUrls[currentPhotoIdx];
+    document.getElementById('lightbox').classList.add('active');
+  }
+
+  function closeLightbox(e) {
+    if(e.target.id === 'lightbox') {
+      document.getElementById('lightbox').classList.remove('active');
+    }
+  }
+
+  function navigatePhoto(dir, e) {
+    e.stopPropagation();
+    currentPhotoIdx = (currentPhotoIdx + dir + photoUrls.length) % photoUrls.length;
+    document.getElementById('lightbox-img').src = photoUrls[currentPhotoIdx];
+  }
+
+  function openChat(key) {
+    const data = chatData[key];
+    document.getElementById('chat-title').innerText = data.name;
+    const container = document.getElementById('chat-messages');
+    container.innerHTML = '';
+    openApp('chat');
+
+    if (data.stream) {
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < data.messages.length) {
+          const m = data.messages[i];
+          const b = document.createElement('div');
+          b.className = `bubble ${m.sender}`;
+          b.innerText = m.text;
+          container.appendChild(b);
+          container.scrollTop = container.scrollHeight;
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 1200);
+    } else {
+      data.messages.forEach(m => {
+        if (m.date) {
+          const d = document.createElement('div');
+          d.className = 'chat-date';
+          d.innerText = m.date;
+          container.appendChild(d);
+        } else {
+          const b = document.createElement('div');
+          b.className = `bubble ${m.sender}`;
+          b.innerText = m.text;
+          container.appendChild(b);
+        }
+      });
+      container.scrollTop = container.scrollHeight;
+    }
+  }
+</script>
+</body>
+</html>
