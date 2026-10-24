@@ -8,23 +8,24 @@
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
     body, html { 
       width: 100%; height: 100%; 
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif; 
-      background: #000; color: #fff; overflow: hidden; 
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif; 
+      background: #f2f2f7; color: #000; overflow: hidden; 
     }
     
+    /* Device Container - 라이트 모드 순정 배경화면 */
     #app-container {
       position: relative;
       width: 100%;
       max-width: 430px;
       height: 100%;
       margin: 0 auto;
-      background: url('photo1.jpg') center/cover no-repeat;
+      background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
 
-    /* Status Bar */
+    /* Status Bar (Light Mode) */
     .status-bar {
       height: 44px;
       padding: 0 24px;
@@ -33,6 +34,7 @@
       align-items: center;
       font-size: 14px;
       font-weight: 600;
+      color: #000;
       z-index: 999;
       letter-spacing: -0.3px;
     }
@@ -43,13 +45,12 @@
       display: flex;
       flex-direction: column;
       transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s ease;
-      background: #000;
+      background: transparent;
       z-index: 10;
     }
 
     .screen.home {
-      background: transparent;
-      padding: 44px 20px 20px 20px;
+      padding: 10px 20px 20px 20px;
       z-index: 1;
     }
 
@@ -68,42 +69,42 @@
     }
 
     .widget {
-      background: rgba(30, 30, 30, 0.65);
+      background: rgba(255, 255, 255, 0.65);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
-      border-radius: 22px;
+      border-radius: 24px;
       padding: 14px 16px;
       height: 142px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      border: 0.5px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      border: 0.5px solid rgba(255, 255, 255, 0.5);
     }
 
     .widget-calendar .day { color: #ff3b30; font-size: 12px; font-weight: 700; text-transform: uppercase; }
-    .widget-calendar .date-num { font-size: 36px; font-weight: 300; line-height: 1.1; margin-top: 2px; }
-    .widget-calendar .event-box { background: rgba(255,255,255,0.12); padding: 8px 10px; border-radius: 12px; }
-    .widget-calendar .event-title { font-size: 12px; font-weight: 600; margin-bottom: 2px; display: flex; align-items: center; gap: 4px; }
-    .widget-calendar .event-time { font-size: 11px; color: rgba(255,255,255,0.6); }
+    .widget-calendar .date-num { font-size: 36px; font-weight: 300; line-height: 1.1; margin-top: 2px; color: #000; }
+    .widget-calendar .event-box { background: rgba(255,255,255,0.7); padding: 8px 10px; border-radius: 12px; }
+    .widget-calendar .event-title { font-size: 12px; font-weight: 600; margin-bottom: 2px; color: #000; }
+    .widget-calendar .event-time { font-size: 11px; color: #3c3c43; }
 
     .widget-photo {
       padding: 0;
       overflow: hidden;
-      background: url('photo1.jpg') center/cover;
+      background: url('photo18.jpg') center/cover;
       cursor: pointer;
       position: relative;
     }
     .widget-photo-overlay {
       position: absolute;
       bottom: 0; left: 0; width: 100%;
-      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
       padding: 12px 12px 10px 12px;
     }
     .widget-photo-title { font-size: 12px; font-weight: 600; color: #fff; }
-    .widget-photo-sub { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 1px; }
+    .widget-photo-sub { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 1px; }
 
-    /* iOS Pure App Icons Vector */
+    /* App Grid */
     .app-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -125,7 +126,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       position: relative;
     }
 
@@ -140,42 +141,41 @@
       font-weight: 700;
       padding: 2px 6px;
       border-radius: 10px;
-      border: 2px solid #000;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      border: 2px solid #fff;
     }
 
-    /* iOS Official Icon Styling */
-    .bg-memo { background: linear-gradient(180deg, #ffe066 0%, #ffd000 100%); color: #1c1c1e; }
-    .bg-settings { background: linear-gradient(180deg, #a2a2a7 0%, #636366 100%); color: #fff; }
-    .bg-camera { background: linear-gradient(180deg, #99999e 0%, #7c7c80 100%); color: #fff; }
+    /* iOS Icon Themes */
+    .bg-settings { background: linear-gradient(180deg, #aeaeb2 0%, #8e8e93 100%); color: #fff; }
+    .bg-memo { background: linear-gradient(180deg, #ffe066 0%, #ffcc00 100%); color: #1c1c1e; }
+    .bg-camera { background: linear-gradient(180deg, #aeaeb2 0%, #636366 100%); color: #fff; }
     .bg-album { background: #fff; }
     
-    .bg-appstore { background: linear-gradient(180deg, #2b88ff 0%, #0062e6 100%); color: #fff; }
-    .bg-spotify { background: #1ed760; color: #000; }
+    .bg-appstore { background: linear-gradient(180deg, #3393ff 0%, #007aff 100%); color: #fff; }
+    .bg-spotify { background: #1ed760; color: #fff; }
     .bg-youtube { background: #ff0000; color: #fff; }
     .bg-insta { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); color: #fff; }
     
-    .bg-phone { background: linear-gradient(180deg, #53e070 0%, #28cd41 100%); color: #fff; }
+    .bg-phone { background: linear-gradient(180deg, #34c759 0%, #248a3d 100%); color: #fff; }
     .bg-safari { background: #fff; color: #007aff; }
-    .bg-kakao { background: #fee500; color: #191919; }
-    .bg-messages { background: linear-gradient(180deg, #53e070 0%, #28cd41 100%); color: #fff; }
+    .bg-kakao { background: #fee500; color: #3c1e1e; }
+    .bg-messages { background: linear-gradient(180deg, #34c759 0%, #248a3d 100%); color: #fff; }
 
     /* Dock Bar */
     .dock {
       position: absolute;
       bottom: 22px;
       left: 16px; right: 16px;
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.5);
       backdrop-filter: blur(30px);
       -webkit-backdrop-filter: blur(30px);
       border-radius: 32px;
       padding: 12px 14px;
       display: flex;
       justify-content: space-around;
-      border: 0.5px solid rgba(255, 255, 255, 0.2);
+      border: 0.5px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
 
-    /* Home Indicator */
     .home-indicator {
       position: absolute;
       bottom: 6px;
@@ -183,28 +183,29 @@
       transform: translateX(-50%);
       width: 134px;
       height: 5px;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(0, 0, 0, 0.3);
       border-radius: 3px;
       z-index: 9999;
       cursor: pointer;
     }
 
-    /* Nav Bar */
+    /* App Screens (Light Mode Unified) */
+    .app-screen { background: #fff; color: #000; }
+    
     .nav-bar {
       height: 54px;
       padding: 0 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
-      background: rgba(20, 20, 20, 0.85);
+      border-bottom: 0.5px solid #c6c6c8;
+      background: rgba(247, 247, 247, 0.92);
       backdrop-filter: blur(20px);
-      margin-top: 30px;
     }
-    .nav-title { font-size: 17px; font-weight: 600; }
-    .back-btn { color: #0a84ff; font-size: 16px; cursor: pointer; display: flex; align-items: center; font-weight: 400; }
+    .nav-title { font-size: 17px; font-weight: 600; color: #000; }
+    .back-btn { color: #007aff; font-size: 16px; cursor: pointer; display: flex; align-items: center; }
 
-    /* Photos App Grid */
+    /* Photos App */
     .photos-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -212,7 +213,7 @@
       padding: 2px;
       overflow-y: auto;
       flex: 1;
-      background: #000;
+      background: #fff;
     }
     .photo-item {
       aspect-ratio: 1;
@@ -241,38 +242,70 @@
     .arrow-left { left: 10px; }
     .arrow-right { right: 10px; }
 
-    /* Phone App List */
-    .recents-list { overflow-y: auto; flex: 1; background: #000; }
-    .date-section { padding: 12px 16px 6px; font-size: 13px; color: #8e8e93; font-weight: 600; background: #1c1c1e; }
+    /* Phone App (순정 전화 앱 규격 + 하단 탭바) */
+    .phone-container { display: flex; flex-direction: column; height: 100%; background: #fff; }
+    .phone-header { padding: 12px 16px 8px; font-size: 28px; font-weight: 700; color: #000; background: #fff; }
+    .phone-sub-header { display: flex; padding: 0 16px 12px; gap: 16px; font-size: 15px; font-weight: 600; color: #007aff; border-bottom: 0.5px solid #c6c6c8; }
+    .phone-sub-header span.active { color: #000; border-bottom: 2px solid #000; padding-bottom: 2px; }
+    .recents-list { overflow-y: auto; flex: 1; background: #fff; }
+    .date-section { padding: 8px 16px 4px; font-size: 13px; color: #8e8e93; font-weight: 600; background: #f2f2f7; }
     .call-item {
       padding: 12px 16px;
-      border-bottom: 0.5px solid #2c2c2e;
+      border-bottom: 0.5px solid #e5e5ea;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .call-name { font-size: 16px; font-weight: 500; color: #fff; }
-    .call-name.missed { color: #ff453a; }
+    .call-name { font-size: 16px; font-weight: 500; color: #000; }
+    .call-name.missed { color: #ff3b30; }
     .call-sub { font-size: 12px; color: #8e8e93; margin-top: 2px; }
-    .call-time { font-size: 13px; color: #8e8e93; }
+    
+    /* 하단 전화 탭바 */
+    .phone-tab-bar {
+      height: 54px;
+      background: rgba(247, 247, 247, 0.94);
+      border-top: 0.5px solid #c6c6c8;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      font-size: 10px;
+      color: #8e8e93;
+    }
+    .phone-tab-bar .tab-item { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
+    .phone-tab-bar .tab-item.active { color: #007aff; }
+    .phone-tab-bar .tab-item svg { width: 22px; height: 22px; fill: currentColor; }
 
-    /* Messages App List */
-    .msg-list { overflow-y: auto; flex: 1; background: #000; }
+    /* Messages App (순정 iMessage 목록 + 검색바) */
+    .msg-container { display: flex; flex-direction: column; height: 100%; background: #fff; }
+    .msg-top-bar { padding: 10px 16px; background: #fff; }
+    .msg-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .msg-title-row h1 { font-size: 30px; font-weight: 700; color: #000; }
+    .msg-search-box {
+      background: #e5e5ea;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 15px;
+      color: #8e8e93;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .msg-list { overflow-y: auto; flex: 1; background: #fff; }
     .msg-item {
       display: flex;
       align-items: center;
       padding: 12px 16px;
-      border-bottom: 0.5px solid #2c2c2e;
+      border-bottom: 0.5px solid #e5e5ea;
       cursor: pointer;
     }
-    .blue-dot { width: 10px; height: 10px; background: #0a84ff; border-radius: 50%; margin-right: 12px; flex-shrink: 0; }
-    .avatar { width: 48px; height: 48px; border-radius: 50%; background: #3a3a3c; display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 18px; margin-right: 12px; flex-shrink: 0; color: #fff; }
+    .blue-dot { width: 10px; height: 10px; background: #007aff; border-radius: 50%; margin-right: 12px; flex-shrink: 0; }
+    .avatar { width: 48px; height: 48px; border-radius: 50%; background: #aeaeb2; display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 18px; margin-right: 12px; flex-shrink: 0; color: #fff; }
     .msg-content { flex: 1; overflow: hidden; }
     .msg-header { display: flex; justify-content: space-between; margin-bottom: 3px; }
-    .msg-author { font-size: 16px; font-weight: 600; color: #fff; }
+    .msg-author { font-size: 16px; font-weight: 600; color: #000; }
     .msg-preview { font-size: 14px; color: #8e8e93; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* iMessage Chat Room (iOS Clean White Theme) */
+    /* Chat Room (순정 iMessage 대화방) */
     .chat-room { display: flex; flex-direction: column; background: #fff; height: 100%; position: relative; }
     .chat-nav {
       height: 54px;
@@ -338,7 +371,6 @@
   <!-- 1. Home Screen -->
   <div class="screen home" id="screen-home">
     <div class="widgets-container">
-      <!-- Calendar Widget -->
       <div class="widget widget-calendar">
         <div class="day">10월 24일 토요일</div>
         <div class="date-num">24</div>
@@ -347,7 +379,6 @@
           <div class="event-time">13:00 - 17:00</div>
         </div>
       </div>
-      <!-- Photos Widget -->
       <div class="widget widget-photo" id="widget-photo">
         <div class="widget-photo-overlay">
           <div class="widget-photo-title">추억</div>
@@ -356,82 +387,36 @@
       </div>
     </div>
 
-    <!-- iOS App Grid (Pure SVG Vector Icons) -->
+    <!-- App Grid (작동하는 앱: 사진, 메시지, 전화 / 나머지 미작동) -->
     <div class="app-grid">
-      <!-- Row 1: 설정, 메모, 카메라, 앨범 -->
-      <div class="app-icon" onclick="openApp('settings')">
-        <div class="icon-box bg-settings">
-          <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-        </div>
-      </div>
-      <div class="app-icon" onclick="openApp('memo')">
-        <div class="icon-box bg-memo">
-          <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-        </div>
-      </div>
-      <div class="app-icon" onclick="openApp('camera')">
-        <div class="icon-box bg-camera">
-          <svg viewBox="0 0 24 24"><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
-        </div>
-      </div>
-      <div class="app-icon" onclick="openApp('photos')">
-        <div class="icon-box bg-album">
-          <svg viewBox="0 0 24 24" style="fill:#ff2d55;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-        </div>
-      </div>
+      <div class="app-icon" onclick="dummyAction()"><div class="icon-box bg-settings"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></div></div>
+      <div class="app-icon" onclick="dummyAction()"><div class="icon-box bg-memo"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div></div>
+      <div class="app-icon" onclick="dummyAction()"><div class="icon-box bg-camera"><svg viewBox="0 0 24 24"><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg></div></div>
+      <div class="app-icon" onclick="openApp('photos')"><div class="icon-box bg-album"><svg viewBox="0 0 24 24" style="fill:#ff2d55;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div></div>
 
-      <!-- Row 2: 앱스토어, 스포티파이, 유튜브, 인스타그램 -->
-      <div class="app-icon" onclick="openApp('appstore')">
-        <div class="icon-box bg-appstore">
-          <svg viewBox="0 0 24 24"><path d="M12 2L3 19h18L12 2zm0 4.8l5.4 10.2H6.6L12 6.8z"/></svg>
-        </div>
-      </div>
-      <div class="app-icon" onclick="openApp('spotify')">
-        <div class="icon-box bg-spotify">
-          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.59 14.42c-.2.3-.59.4-.89.2-2.44-1.49-5.51-1.83-9.13-1.01-.34.08-.68-.15-.75-.49-.08-.34.15-.68.49-.75 3.97-.91 7.37-.52 10.09 1.14.3.19.4.59.19.91zm1.22-2.72c-.25.41-.78.53-1.18.29-2.79-1.72-7.05-2.22-10.35-1.21-.45.14-.93-.11-1.07-.56-.14-.45.11-.93.56-1.07 3.78-1.15 8.49-.59 11.75 1.41.4.24.52.77.29 1.14zm.13-2.85c-3.35-1.99-8.88-2.17-12.08-1.2-.52.16-1.07-.13-1.23-.65-.16-.52.13-1.07.65-1.23 3.68-1.12 9.77-.9 13.62 1.39.47.28.62.89.34 1.36-.28.46-.89.62-1.3.33z"/></svg>
-        </div>
-      </div>
-      <div class="app-icon" onclick="openApp('youtube')">
-        <div class="icon-box bg-youtube">
-          <svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09v1.68c0 .6-.03 1.29-.1 2.09-.06.8-.15 1.43-.28 1.9-.13.47-.35.85-.66 1.13-.3.29-.7.48-1.2.57-1.74.32-5.7.32-5.7.32s-3.96 0-5.7-.32c-.5-.09-.9-.28-1.2-.57-.31-.28-.53-.66-.66-1.13-.13-.47-.22-1.1-.28-1.9C2.03 14.12 2 13.43 2 12.83v-1.68c0-.6.03-1.29.1-2.09.06-.8.15-1.43.28-1.9.13-.47.35-.85.66-1.13.3-.29.7-.48 1.2-.57C5.98 5 9.94 5 9.94 5s3.96 0 5.7.32c.5.09.9.28 1.2.57.31.28.53.66.66 1.13z"/></svg>
-        </div>
-      </div>
-      <div class="app-icon" onclick="openApp('insta')">
-        <div class="icon-box bg-insta">
-          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        </div>
-      </div>
+      <div class="app-icon" onclick="dummyAction()"><div class="icon-box bg-appstore"><svg viewBox="0 0 24 24"><path d="M12 2L3 19h18L12 2zm0 4.8l5.4 10.2H6.6L12 6.8z"/></svg></div></div>
+      <div class="app-icon" onclick="dummyAction()"><div class="icon-box bg-spotify"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.59 14.42c-.2.3-.59.4-.89.2-2.44-1.49-5.51-1.83-9.13-1.01-.34.08-.68-.15-.75-.49-.08-.34.15-.68.49-.75 3.97-.91 7.37-.52 10.09 1.14.3.19.4.59.19.91zm1.22-2.72c-.25.41-.78.53-1.18.29-2.79-1.72-7.05-2.22-10.35-1.21-.45.14-.93-.11-1.07-.56-.14-.45.11-.93.56-1.07 3.78-1.15 8.49-.59 11.75 1.41.4.24.52.77.29 1.14zm.13-2.85c-3.35-1.99-8.88-2.17-12.08-1.2-.52.16-1.07-.13-1.23-.65-.16-.52.13-1.07.65-1.23 3.68-1.12 9.77-.9 13.62 1.39.47.28.62.89.34 1.36-.28.46-.89.62-1.3.33z"/></svg></div></div>
+      <div class="app-icon" onclick="dummyAction()"><div class="icon-box bg-youtube"><svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09v1.68c0 .6-.03 1.29-.1 2.09-.06.8-.15 1.43-.28 1.9-.13.47-.35.85-.66 1.13-.3.29-.7.48-1.2.57-1.74.32-5.7.32-5.7.32s-3.96 0-5.7-.32c-.5-.09-.9-.28-1.2-.57-.31-.28-.53-.66-.66-1.13-.13-.47-.22-1.1-.28-1.9C2.03 14.12 2 13.43 2 12.83v-1.68c0-.6.03-1.29.1-2.09.06-.8.15-1.43.28-1.9.13-.47.35-.85.66-1.13.3-.29.7-.48 1.2-.57C5.98 5 9.94 5 9.94 5s3.96 0 5.7.32c.5.09.9.28 1.2.57.31.28.53.66.66 1.13z"/></svg></div></div>
+      <div class="app-icon" onclick="dummyAction()"><div class="icon-box bg-insta"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
     </div>
 
-    <!-- Dock Bar: 전화, 사파리, 카카오톡, 메시지 -->
+    <!-- Dock Bar -->
     <div class="dock">
       <div class="app-icon" onclick="openApp('phone')">
-        <div class="icon-box bg-phone">
-          <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-        </div>
+        <div class="icon-box bg-phone"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
         <span class="badge">11</span>
       </div>
-      <div class="app-icon" onclick="openApp('safari')">
-        <div class="icon-box bg-safari">
-          <svg viewBox="0 0 24 24" style="fill:#007aff;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13l-2 6 6 2-2-6-2-2z"/></svg>
-        </div>
-      </div>
-      <div class="app-icon" onclick="openApp('kakao')">
-        <div class="icon-box bg-kakao">
-          <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 3.185-9 7.115 0 2.557 1.707 4.8 4.27 6.054-.188.702-.682 2.545-.78 2.94-.122.49.18.483.378.352.157-.103 2.496-1.7 3.512-2.388.53.078 1.074.118 1.62.118 4.97 0 9-3.186 9-7.116S16.97 3 12 3z"/></svg>
-        </div>
-      </div>
+      <div class="app-icon" onclick="dummyAction()"><div class="icon-box bg-safari"><svg viewBox="0 0 24 24" style="fill:#007aff;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13l-2 6 6 2-2-6-2-2z"/></svg></div></div>
+      <div class="app-icon" onclick="dummyAction()"><div class="icon-box bg-kakao"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 3.185-9 7.115 0 2.557 1.707 4.8 4.27 6.054-.188.702-.682 2.545-.78 2.94-.122.49.18.483.378.352.157-.103 2.496-1.7 3.512-2.388.53.078 1.074.118 1.62.118 4.97 0 9-3.186 9-7.116S16.97 3 12 3z"/></svg></div></div>
       <div class="app-icon" onclick="openApp('messages')">
-        <div class="icon-box bg-messages">
-          <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
-        </div>
+        <div class="icon-box bg-messages"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg></div>
         <span class="badge">13</span>
       </div>
     </div>
   </div>
 
   <!-- 2. Photos App Screen -->
-  <div class="screen hidden" id="screen-photos">
+  <div class="screen hidden app-screen" id="screen-photos">
     <div class="nav-bar">
       <div class="back-btn" onclick="goHome()">＜ 홈</div>
       <div class="nav-title">사진</div>
@@ -440,34 +425,65 @@
     <div class="photos-grid" id="photos-grid"></div>
   </div>
 
-  <!-- 3. Phone App Screen -->
-  <div class="screen hidden" id="screen-phone">
-    <div class="nav-bar">
-      <div class="back-btn" onclick="goHome()">＜ 홈</div>
-      <div class="nav-title">최근 통화</div>
-      <div></div>
+  <!-- 3. Phone App Screen (순정 규격 + 하단 탭바) -->
+  <div class="screen hidden app-screen" id="screen-phone">
+    <div class="phone-container">
+      <div class="nav-bar" style="border:none; background:#fff;">
+        <div class="back-btn" onclick="goHome()"></div>
+        <div style="font-size:15px; color:#007aff; cursor:pointer;" onclick="goHome()">편집</div>
+      </div>
+      <div class="phone-header">최근 통화</div>
+      <div class="phone-sub-header">
+        <span class="active">모든 전화</span>
+        <span style="color:#8e8e93;">부재중</span>
+      </div>
+      <div class="recents-list" id="recents-list"></div>
+      <!-- 하단 전화 앱 순정 탭 바 -->
+      <div class="phone-tab-bar">
+        <div class="tab-item">
+          <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span>즐겨찾기</span>
+        </div>
+        <div class="tab-item active">
+          <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.58 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+          <span>최근 통화</span>
+        </div>
+        <div class="tab-item">
+          <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          <span>연락처</span>
+        </div>
+        <div class="tab-item">
+          <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+          <span>키패드</span>
+        </div>
+      </div>
     </div>
-    <div class="recents-list" id="recents-list"></div>
   </div>
 
-  <!-- 4. Messages App Screen -->
-  <div class="screen hidden" id="screen-messages">
-    <div class="nav-bar">
-      <div class="back-btn" onclick="goHome()">＜ 홈</div>
-      <div class="nav-title">메시지</div>
-      <div></div>
+  <!-- 4. Messages App Screen (상단 검색창 포함) -->
+  <div class="screen hidden app-screen" id="screen-messages">
+    <div class="msg-container">
+      <div class="msg-top-bar">
+        <div class="msg-title-row">
+          <h1>메시지</h1>
+          <span style="color:#007aff; font-size:16px; cursor:pointer;" onclick="goHome()">편집</span>
+        </div>
+        <div class="msg-search-box">
+          <span>🔍</span> 검색
+        </div>
+      </div>
+      <div class="msg-list" id="msg-list"></div>
     </div>
-    <div class="msg-list" id="msg-list"></div>
   </div>
 
   <!-- 5. Chat Room Screen -->
   <div class="screen hidden" id="screen-chat">
-    <div class="chat-nav">
-      <div class="back-btn" onclick="openApp('messages')">＜ 백</div>
-      <div class="chat-title" id="chat-title">대화방</div>
-      <div style="width:30px;"></div>
-    </div>
     <div class="chat-room">
+      <div class="chat-nav">
+        <div class="back-btn" onclick="openApp('messages')">＜ 백</div>
+        <div class="chat-title" id="chat-title">대화방</div>
+        <div style="width:30px;"></div>
+      </div>
       <div class="chat-messages" id="chat-messages"></div>
       <div class="chat-input-bar">
         <div class="chat-input-box">iMessage 입력...</div>
@@ -493,6 +509,10 @@
     photoUrls.push(`photo${i}.jpg`);
   }
   let currentPhotoIdx = 0;
+
+  function dummyAction() {
+    // 미작동 앱 클릭 시 반응 없음
+  }
 
   const callLogs = [
     { section: "오늘 - 10월 24일", items: [
